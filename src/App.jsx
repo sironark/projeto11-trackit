@@ -1,3 +1,4 @@
+import LoginPage from "./PagesComponets/LoginPages/Login"
 
 
 
@@ -7,7 +8,7 @@ function App() {
   return (
     <>
 
-   <p>Olá mundo</p>
+   <LoginPage/>
        
     </>
   )
