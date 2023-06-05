@@ -19,9 +19,14 @@ export function HojePage(){
     const [dataMes, setDataMes] = useState('')
     const [arrHabitos, setArrHabitos] = useState([]);
     const [arrChecked, setArrChecked] = useState([]);
-    
+    const [concluidos, setConcluidos] = useState()
+   // const {progresso, setProgresso} = useContext(UserContext);
+   // const { numeroArr, setNumeroArr} = useContext(UserContext)
+
 useEffect(()=> {
     renderTela()
+    console.log(concluidos)
+
 },[]);
 
 function renderTela(){
@@ -29,7 +34,7 @@ function renderTela(){
 
     promisse.then((resposta) => {
         const aux = (resposta.data)
-        setArrHabitos(aux)     
+        setArrHabitos(aux)   
         getInfoHabit(aux)
 
         })
@@ -60,12 +65,17 @@ function checkHabit(habito){
     console.log(habito.id)
     const aux = [...arrChecked, habito.id]
     setArrChecked(aux)
+    
+   // setNumeroArr(aux.length)
     console.log(aux)
+    console.log(concluidos)
+    //setProgresso(concluidos)
 
 
     const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/check`, null, header);
     promisse.then((resposta) => {
         console.log(resposta.data);
+        setConcluidos(aux.length)
         renderTela()
     })
     promisse.catch((erro) => {
@@ -80,7 +90,11 @@ function checkHabit(habito){
                 const aux1 = [...arrChecked]
                 aux1.splice(indexof, 1)
                 setArrChecked(aux1)
+                setConcluidos(aux1.length)
                 renderTela()
+                
+               // setNumeroArr(aux1.length)
+               // setProgresso(concluidos)
                 console.log(resposta)})
 
             promessa.catch((erro) => console.log(erro.response.data.message))
@@ -95,9 +109,9 @@ return(
     <PageContainerHabitos>
        <NavBarr />
 
-            <PercentHabit>
+            <PercentHabit concluidos = {concluidos}>
                 <h1 data-test="today">{diaSemana}, {dataMes}</h1>
-                <h3 data-test="today-counter" >Nenhum hábito concluído ainda</h3>    
+                <h3 data-test="today-counter" >{concluidos == 0 ?'Nenhum hábito concluído ainda' : `${((concluidos/arrHabitos.length)*100).toFixed(0)}% dos hábitos concluídos`}</h3>    
             </PercentHabit>
                 
             <ListaHabitos >

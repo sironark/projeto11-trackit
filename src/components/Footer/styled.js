@@ -16,32 +16,27 @@ export const MenuBottom = styled.div`
     button{
         border: solid 1px #fff;
         background-color: #fff;
-        :nth-child(1){
         font-weight: 400;
         font-size: 17.976px;
         line-height: 22px;
         text-align: center;
         color: #52B6FF;
+    
+    
     }
-    :nth-child(3){
-        font-weight: 400;
-        font-size: 17.976px;
-        line-height: 22px;
-        text-align: center;
-        color: #52B6FF;
-    }
-    :nth-child(2){
+
+    .progress-bar{
         width: 91px;
         height: 91px;
-        background: #52B6FF;
+        position: fixed;
+        
+        bottom: 20px;
+        right: 145px;
+        margin: auto;
+        
+        
+            }
 
-        font-weight: 400;
-        font-size: 17.976px;
-        line-height: 22px;
-        text-align: center;
-        color: #FFFFFF;
-    }
-}
 
 
 `;

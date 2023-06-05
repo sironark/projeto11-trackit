@@ -24,6 +24,7 @@ export default function HabitosPage(){
     const [meusHabitos, setMeusHabitos] = useState([]);
     const {user} = useContext(UserContext)
    const navigate = useNavigate()
+   
 
     useEffect( () => {
 
@@ -34,6 +35,7 @@ export default function HabitosPage(){
         promisse.then((resposta) => {
             console.log(resposta.data)
             setMeusHabitos(resposta.data)
+            
             
         })
         promisse.catch((erro) =>{
@@ -47,15 +49,23 @@ export default function HabitosPage(){
     }
 
     function addSemana(dia, index){
+        if(!arrDiaSemana.includes(index)){
         let arr = [...arrDiaSemana,index]
         setArrDiaSemana(arr)
+        }else{
+            const arr2 = [...arrDiaSemana]
+            const indice =arr2.indexOf(index)
+            arr2.splice(indice,1)
+            setArrDiaSemana(arr2)
+        }
         }
 
     function salvarHabito(e){
             e.preventDefault()
             console.log(nomeHabito)
             console.log(arrDiaSemana)
-            setDesabilitar(true)
+            setDesabilitar(true) 
+            setExpAdicionar(false)   
             
 
 
@@ -84,6 +94,7 @@ export default function HabitosPage(){
         .catch((err) => {
             alert(err.reponse.data.messege)
             setDesabilitar(false)
+            navigate('/habitos')
 
         })
 

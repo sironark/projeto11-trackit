@@ -39,7 +39,7 @@ export const PercentHabit = styled.div`
       font-weight: 400;
       font-size: 17.976px;
       line-height: 22px;
-      color: #BABABA;
+      color: ${props => props.concluidos == 0 ? '#BABABA' : "#8FC549"};
 
     }
 `
