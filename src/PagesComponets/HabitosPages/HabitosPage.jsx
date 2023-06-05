@@ -1,7 +1,8 @@
-import { AddHabitos, AvisoHabitos, ConfigAdd, ListaHabitos, MenuBottom, NavBar, PageContainerHabitos, SCMapLi,  SCli, SCul } from "./styled";
+import { AddHabitos, AvisoHabitos, ConfigAdd, ListaHabitos,  PageContainerHabitos, SCMapLi,  SCli, SCul } from "./styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavBarr } from "../../components/Navbar/NavBar";
+import Footer from "../../components/Footer/FooterBar";
 
 
 
@@ -13,14 +14,11 @@ export default function HabitosPage(){
     const [nomeHabito, setNomeHabito] = useState("");
     const [arrDiaSemana, setArrDiaSemana] = useState([]);
     const [desabilitar, setDesabilitar] = useState(false)
-    const acesso = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTQ2MywiaWF0IjoxNjg1OTExNTM2fQ.8RggUqSwTkpCC-XY7NM-r-PjqmPDl9sqKvGpHWdArhk"
+    const acesso = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTQ2MywiaWF0IjoxNjg1OTI0NTI5fQ.Wy4RXeH92h9BGFvs9pJYbOf8PStHq9svnKOupNsr6LA"
     const URL_Post = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"    
     const RAW_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit"
-    const navigate = useNavigate();
     const arrNumSemana = [0,1,2,3,4,5,6]
     const [meusHabitos, setMeusHabitos] = useState([]);
-    const [aux, setAux] = useState([])
-
     useEffect( () => {
 
         axios.create({   
@@ -84,13 +82,23 @@ export default function HabitosPage(){
 
     }
 
+    function Deletar(idHabito){
+      const confirmar = confirm("Deseja realmente deletar?")
+        
+      if(confirmar){
+     const promisse = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${idHabito}`,{headers: {Authorization: `Bearer ${acesso}`}, 
+        baseURL: RAW_URL})
+    promisse.then( (resposta) => {
+        
+        console.log(resposta)})
+    promisse.catch((erro) => console.log(erro.response.data.message));
+      }
+    }
+
     return(
         <PageContainerHabitos>
 
-            <NavBar>
-                <img src="src/assets/logo-mini.svg" alt="logoMini"/>
-                <div alt="foto de perfil"></div>
-            </NavBar>
+           <NavBarr/>
 
             <AddHabitos>
                 <p>Meus hábitos</p>
@@ -146,16 +154,12 @@ export default function HabitosPage(){
                                     </SCMapLi>
                                 ))}
                             </div>
-                            <img src="/src/assets/dump.svg" alt="trash"/>
+                            <img src="/src/assets/dump.svg" alt="trash" onClick={()=>Deletar((habito.id))}/>
                         </li>
                         ))}
             </ListaHabitos>
                         }
-            <MenuBottom>
-                <button onClick={()=> navigate('/habitos')}>Hábitos</button>
-                <button>Hoje</button>
-                <button>Histórico</button>
-            </MenuBottom>
+            <Footer/>
         </PageContainerHabitos>
     );
 }
