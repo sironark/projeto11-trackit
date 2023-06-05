@@ -1,8 +1,11 @@
 import { AddHabitos, AvisoHabitos, ConfigAdd, ListaHabitos,  PageContainerHabitos, SCMapLi,  SCli, SCul } from "./styled";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavBarr } from "../../components/Navbar/NavBar";
 import Footer from "../../components/Footer/FooterBar";
+import { ThreeDots } from "react-loader-spinner";
+import UserContext from "../../components/Context/UseContext";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -14,17 +17,18 @@ export default function HabitosPage(){
     const [nomeHabito, setNomeHabito] = useState("");
     const [arrDiaSemana, setArrDiaSemana] = useState([]);
     const [desabilitar, setDesabilitar] = useState(false)
-    const acesso = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTQ2MywiaWF0IjoxNjg1OTI0NTI5fQ.Wy4RXeH92h9BGFvs9pJYbOf8PStHq9svnKOupNsr6LA"
+    
     const URL_Post = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"    
     const RAW_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit"
     const arrNumSemana = [0,1,2,3,4,5,6]
     const [meusHabitos, setMeusHabitos] = useState([]);
+    const {user} = useContext(UserContext)
+   const navigate = useNavigate()
+
     useEffect( () => {
 
-        axios.create({   
-            
-        })
-        const promisse = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', {headers: {Authorization: `Bearer ${acesso}`}, 
+        
+        const promisse = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', {headers: {Authorization: `Bearer ${user.token}`}, 
         baseURL: RAW_URL});
 
         promisse.then((resposta) => {
@@ -52,6 +56,7 @@ export default function HabitosPage(){
             console.log(nomeHabito)
             console.log(arrDiaSemana)
             setDesabilitar(true)
+            
 
 
             
@@ -64,7 +69,7 @@ export default function HabitosPage(){
     
       
         axios.create({   
-            headers: {Authorization: `Bearer ${acesso}`}, 
+            headers: {Authorization: `Bearer ${user.token}`}, 
             baseURL: RAW_URL, 
         })
         
@@ -72,6 +77,8 @@ export default function HabitosPage(){
         .then((res) => {
             console.log(res.data)
             setDesabilitar(false)
+            
+            navigate('/habitos')
             
         })
         .catch((err) => {
@@ -86,7 +93,7 @@ export default function HabitosPage(){
       const confirmar = confirm("Deseja realmente deletar?")
         
       if(confirmar){
-     const promisse = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${idHabito}`,{headers: {Authorization: `Bearer ${acesso}`}, 
+     const promisse = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${idHabito}`,{headers: {Authorization: `Bearer ${user.token}`}, 
         baseURL: RAW_URL})
     promisse.then( (resposta) => {
         
@@ -102,18 +109,20 @@ export default function HabitosPage(){
 
             <AddHabitos>
                 <p>Meus hábitos</p>
-                <button onClick={adicionarHabito}><p>+</p></button>
+                <button  data-test="habit-create-btn" onClick={adicionarHabito}><p>+</p></button>
             </AddHabitos>
 
             <ConfigAdd onSubmit={salvarHabito} 
             
-            expHadicionar = {expHadicionar}>
-                <input disabled={desabilitar} placeholder="nome do hábito" onChange={(e) => setNomeHabito(e.target.value)}/>
+            expHadicionar = {expHadicionar}
+            data-test="habit-create-container">
+                <input data-test="habit-name-input" disabled={desabilitar} placeholder="nome do hábito" onChange={(e) => setNomeHabito(e.target.value)}/>
                 
                 <SCul>
                     {arrSem.map((dia, index )=>(
 
-                        <SCli disabled={desabilitar}
+                        <SCli data-test="habit-day" 
+                        disabled={desabilitar}
                         key={index} 
                         arrDiaSemana ={arrDiaSemana}
                         index = {index}
@@ -126,8 +135,8 @@ export default function HabitosPage(){
                 </SCul>
 
                 <span>
-                <p onClick={()=> setExpAdicionar(false)}>Cancelar</p>
-                <button disabled={desabilitar} type="submit" >Salvar</button>
+                <p data-test="habit-create-cancel-btn" onClick={()=> setExpAdicionar(false)}>Cancelar</p>
+                <button data-test="habit-create-save-btn"  disabled={desabilitar} type="submit" >{desabilitar ? <ThreeDots type="ThreeDots" color="#fff" height={20} width={40}  /> : "Salvar"}</button>
                 </span>
 
             </ConfigAdd>
@@ -140,11 +149,12 @@ export default function HabitosPage(){
                         {meusHabitos.length >0 &&
             <ListaHabitos>
                         {meusHabitos.map((habito, index) => (
-                        <li key={index}>
-                            <p>{habito.name}</p>
+                        <li data-test="habit-container"
+                        key={index}>
+                            <p data-test="habit-name">{habito.name}</p>
                             <div>
                                 {arrSem.map((dia, i )=>(
-                                    <SCMapLi 
+                                    <SCMapLi data-test="habit-day" 
                                     key={i}
                                     meusHabitos = {habito.days}
                                     index = {i}
@@ -154,7 +164,7 @@ export default function HabitosPage(){
                                     </SCMapLi>
                                 ))}
                             </div>
-                            <img src="/src/assets/dump.svg" alt="trash" onClick={()=>Deletar((habito.id))}/>
+                            <img data-test="habit-delete-btn"  src="/src/assets/dump.svg" alt="trash" onClick={()=>Deletar((habito.id))}/>
                         </li>
                         ))}
             </ListaHabitos>

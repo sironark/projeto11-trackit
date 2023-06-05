@@ -17,14 +17,14 @@ export const NavBar = styled.div`
         left: 18px;
         top: 10px;
     };
-    div{
+    img:nth-child(2){
         position: absolute;
         width: 51px;
         height: 51px;
         left: 306px;
         top: 9px;
 
-        background: url(/src/assets/Rectangle14.png);
+        
         border-radius: 98.5px;
     };
 `;

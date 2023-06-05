@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { PageContainer } from "./styled";
 import { useState } from "react";
 import axios from "axios";
+import { ThreeDots } from "react-loader-spinner";
 
 
 export default function RegisterPage(){
@@ -44,14 +45,14 @@ export default function RegisterPage(){
         <PageContainer>
         <img src="src/assets/WhatsApp Image 2023-05-30 at 17.00.05.jpeg" alt="foto" />
         <form onSubmit={rota2}>
-            <input disabled={desabilitar} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-            <input disabled={desabilitar} placeholder="senha" onChange={(e) => setPassword(e.target.value)}/>
-            <input disabled={desabilitar} placeholder="nome" onChange={(e) => setNome(e.target.value)} />
-            <input disabled={desabilitar} placeholder="foto" onChange={(e) => setImage(e.target.value)}/>
+            <input data-test="email-input" disabled={desabilitar} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+            <input  data-test="password-input" disabled={desabilitar} placeholder="senha" onChange={(e) => setPassword(e.target.value)}/>
+            <input data-test="user-name-input"  disabled={desabilitar} placeholder="nome" onChange={(e) => setNome(e.target.value)} />
+            <input data-test="user-image-input"  disabled={desabilitar} placeholder="foto" onChange={(e) => setImage(e.target.value)}/>
 
-            <button disabled={desabilitar}>Entrar</button>
+            <button data-test="signup-btn"  disabled={desabilitar}>{desabilitar ? <ThreeDots type="ThreeDots" color="#fff" height={20} width={40}  /> :"Cadastrar"}</button>
         </form>
-        <Link to={`/`}>
+        <Link data-test="login-link"  to={`/`}>
         <p>Já tem uma conta? Faça login!</p>
         </Link>
     </PageContainer>

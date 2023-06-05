@@ -1,25 +1,30 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../../components/Footer/FooterBar";
 import { NavBarr } from "../../components/Navbar/NavBar";
 import { ListaHabitos, PageContainerHabitos, PercentHabit, SCli } from "./styled";
 import axios from "axios";
 import dayjs from "dayjs";
+import UserContext from "../../components/Context/UseContext";
+import { useNavigate } from "react-router-dom";
 
 
 
 export function HojePage(){
+    const {user} = useContext(UserContext)
+    const navigate = useNavigate();
     const RAW_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit"
-    const acesso = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTQ2MywiaWF0IjoxNjg1OTI0NTI5fQ.Wy4RXeH92h9BGFvs9pJYbOf8PStHq9svnKOupNsr6LA"
+    
     const header = {
-        headers: {Authorization: `Bearer ${acesso}`}, 
+        headers: {Authorization: `Bearer ${user.token}`}, 
         baseURL: RAW_URL}
     const [diaSemana, setDiaSemana] = useState('')
     const [dataMes, setDataMes] = useState('')
     const [arrHabitos, setArrHabitos] = useState([]);
     const [arrChecked, setArrChecked] = useState([]);
-
+    
 useEffect(()=> {
 
+    console.log(user)
     const promisse = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today', header)
 
     promisse.then((resposta) => {
@@ -71,9 +76,10 @@ function checkHabit(habito){
     const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/check`, null, header);
     promisse.then((resposta) => {
         console.log(resposta.data);
+        navigate('/hoje')
     })
     promisse.catch((erro) => {
-    console.log(erro.response.status)
+    
         if(erro.response.status == 400){
             
             const promessa = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/uncheck`, null, header)
@@ -96,29 +102,30 @@ function checkHabit(habito){
 
 return(
     <PageContainerHabitos>
-       <NavBarr/>
+       <NavBarr />
 
             <PercentHabit>
-                <h1>{diaSemana}, {dataMes}</h1>
-                <h3>Nenhum hábito concluído ainda</h3>    
+                <h1 data-test="today">{diaSemana}, {dataMes}</h1>
+                <h3 data-test="today-counter" >Nenhum hábito concluído ainda</h3>    
             </PercentHabit>
 
             <ListaHabitos >
                 {arrHabitos.map((habito, indice)=>(
-                        <SCli key={indice}
+                        <SCli   data-test="today-habit-container"
+                                key={indice}
                                 arrChecked = {arrChecked}
                                 idHabito = {habito.id}
                                 doneHabito ={habito.done}
                                 currentSequence = {habito.currentSequence}
                                 highestSequence = {habito.highestSequence}
                         >
-                            <p>{habito.name}</p>
+                            <p data-test="today-habit-name">{habito.name}</p>
                             <div>
-                                <ul>Sequência atual: <h4>{habito.currentSequence} dias</h4></ul>
-                                <ul>Seu recorde: <h5>{habito.highestSequence} dias</h5></ul>
+                                <ul data-test="today-habit-sequence" >Sequência atual: <h4>{habito.currentSequence} dias</h4></ul>
+                                <ul data-test="today-habit-record" >Seu recorde: <h5>{habito.highestSequence} dias</h5></ul>
                             </div>
                             <span>
-                            <img src="/src/assets/check.svg" alt="check" onClick={() => checkHabit(habito, indice)}/>
+                            <img data-test="today-habit-check-btn" src="/src/assets/check.svg" alt="check" onClick={() => checkHabit(habito, indice)}/>
                             </span>
                         </SCli>
                       ))}
@@ -126,7 +133,7 @@ return(
 
 
 
-        <Footer/>
+        <Footer />
     </PageContainerHabitos>
 );
 }

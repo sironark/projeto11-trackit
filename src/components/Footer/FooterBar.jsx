@@ -4,11 +4,12 @@ import { MenuBottom } from "./styled";
 
 export default function Footer(){
     const navigate = useNavigate()
+   
     return(
-            <MenuBottom>
-                <button onClick={()=> navigate('/habitos')}>Hábitos</button>
-                <button onClick={() => navigate('/hoje')}>Hoje</button>
-                <button>Histórico</button>
+            <MenuBottom data-test="menu">
+                <button data-test="habit-link" onClick={()=> navigate('/habitos')}>Hábitos</button>
+                <button  data-test="today-link" onClick={() => navigate('/hoje')}>Hoje</button>
+                <button data-test="history-link" onClick={()=> navigate('/historico')} >Histórico</button>
             </MenuBottom>
     );
 }
