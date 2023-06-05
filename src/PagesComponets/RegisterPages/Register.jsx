@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageContainer } from "./styled";
 import { useState } from "react";
 import axios from "axios";
@@ -11,7 +11,7 @@ export default function RegisterPage(){
     const [password, setPassword] = useState("");
     const [nome, setNome] = useState("");
     const [image, setImage] = useState("");
-
+    const navigate = useNavigate()
     function rota2(e){
         e.preventDefault();
 
@@ -30,11 +30,13 @@ export default function RegisterPage(){
         promisse.then(resposta =>{
             console.log(resposta.data)
             setDesabilitar(false)
+            navigate('/')
         })
 
         promisse.catch(erro=> {
             console.log(erro.response.data.message)
-            //alert(erro.response.data.message)
+            alert(erro.response.data.message)
+            setDesabilitar(false)
         })
     }
     
@@ -45,12 +47,12 @@ export default function RegisterPage(){
         <PageContainer>
         <img src="src/assets/WhatsApp Image 2023-05-30 at 17.00.05.jpeg" alt="foto" />
         <form onSubmit={rota2}>
-            <input data-test="email-input" disabled={desabilitar} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-            <input  data-test="password-input" disabled={desabilitar} placeholder="senha" onChange={(e) => setPassword(e.target.value)}/>
-            <input data-test="user-name-input"  disabled={desabilitar} placeholder="nome" onChange={(e) => setNome(e.target.value)} />
-            <input data-test="user-image-input"  disabled={desabilitar} placeholder="foto" onChange={(e) => setImage(e.target.value)}/>
+            <input required data-test="email-input" disabled={desabilitar} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+            <input required data-test="password-input" disabled={desabilitar} placeholder="senha" onChange={(e) => setPassword(e.target.value)}/>
+            <input required data-test="user-name-input"  disabled={desabilitar} placeholder="nome" onChange={(e) => setNome(e.target.value)} />
+            <input required data-test="user-image-input"  disabled={desabilitar} placeholder="foto" onChange={(e) => setImage(e.target.value)}/>
 
-            <button data-test="signup-btn"  disabled={desabilitar}>{desabilitar ? <ThreeDots type="ThreeDots" color="#fff" height={20} width={40}  /> :"Cadastrar"}</button>
+            <button data-test="signup-btn" type="submit" disabled={desabilitar}>{desabilitar ? <ThreeDots type="ThreeDots" color="#fff" height={20} width={40}  /> :"Cadastrar"}</button>
         </form>
         <Link data-test="login-link"  to={`/`}>
         <p>Já tem uma conta? Faça login!</p>

@@ -5,13 +5,11 @@ import { ListaHabitos, PageContainerHabitos, PercentHabit, SCli } from "./styled
 import axios from "axios";
 import dayjs from "dayjs";
 import UserContext from "../../components/Context/UseContext";
-import { useNavigate } from "react-router-dom";
 
 
 
 export function HojePage(){
     const {user} = useContext(UserContext)
-    const navigate = useNavigate();
     const RAW_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit"
     
     const header = {
@@ -23,30 +21,22 @@ export function HojePage(){
     const [arrChecked, setArrChecked] = useState([]);
     
 useEffect(()=> {
+    renderTela()
+},[]);
 
-    console.log(user)
+function renderTela(){
     const promisse = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today', header)
 
     promisse.then((resposta) => {
         const aux = (resposta.data)
         setArrHabitos(aux)     
         getInfoHabit(aux)
-        checarSequencia(aux)
+
         })
     promisse.catch((erro) => console.log(erro.response.data.message));
-        
-    
-},[]);
+    }
 
-function checarSequencia(aux){
-    console.log (aux)
-
-}
-
-function getInfoHabit(array){
-
-    console.log(array)
-
+function getInfoHabit(){
         if(dayjs().$W == 0){
             setDiaSemana("Domingo")
         } else if(dayjs().$W == 1){
@@ -76,7 +66,7 @@ function checkHabit(habito){
     const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/check`, null, header);
     promisse.then((resposta) => {
         console.log(resposta.data);
-        navigate('/hoje')
+        renderTela()
     })
     promisse.catch((erro) => {
     
@@ -85,12 +75,13 @@ function checkHabit(habito){
             const promessa = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/uncheck`, null, header)
             
             promessa.then((resposta) => {
-            
+                
                 const indexof = arrChecked.indexOf(habito.id)
                 const aux1 = [...arrChecked]
                 aux1.splice(indexof, 1)
                 setArrChecked(aux1)
-            console.log(resposta)})
+                renderTela()
+                console.log(resposta)})
 
             promessa.catch((erro) => console.log(erro.response.data.message))
         }
@@ -108,7 +99,7 @@ return(
                 <h1 data-test="today">{diaSemana}, {dataMes}</h1>
                 <h3 data-test="today-counter" >Nenhum hábito concluído ainda</h3>    
             </PercentHabit>
-
+                
             <ListaHabitos >
                 {arrHabitos.map((habito, indice)=>(
                         <SCli   data-test="today-habit-container"

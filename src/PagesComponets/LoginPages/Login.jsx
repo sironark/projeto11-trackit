@@ -51,11 +51,11 @@ const {user, setUser} = useContext(UserContext)
         <PageContainer>
             <img src="src/assets/WhatsApp Image 2023-05-30 at 17.00.05.jpeg" alt="foto" />
             <form onSubmit={rota1}>
-                <input data-test="email-input" disabled={desabilitar} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+                <input required data-test="email-input" disabled={desabilitar} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
 
-                <input data-test="password-input" disabled={desabilitar} placeholder="senha" onChange={(e) => setPassword(e.target.value)}/>
+                <input required data-test="password-input" disabled={desabilitar} placeholder="senha" onChange={(e) => setPassword(e.target.value)}/>
 
-                <button  data-test="login-btn" disabled={desabilitar} >{desabilitar ? <ThreeDots type="ThreeDots" color="#fff" height={20} width={40}  /> :"Entrar"}</button>
+                <button  data-test="login-btn" type="submit" disabled={desabilitar} >{desabilitar ? <ThreeDots type="ThreeDots" color="#fff" height={20} width={40}  /> :"Entrar"}</button>
             </form>
             <Link data-test="signup-link"  to={`/cadastro`}>
                 <p>Não tem uma conta? Cadastre-se!</p>

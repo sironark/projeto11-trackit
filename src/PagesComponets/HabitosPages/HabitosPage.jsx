@@ -116,7 +116,7 @@ export default function HabitosPage(){
             
             expHadicionar = {expHadicionar}
             data-test="habit-create-container">
-                <input data-test="habit-name-input" disabled={desabilitar} placeholder="nome do hábito" onChange={(e) => setNomeHabito(e.target.value)}/>
+                <input required data-test="habit-name-input" disabled={desabilitar} placeholder="nome do hábito" onChange={(e) => setNomeHabito(e.target.value)}/>
                 
                 <SCul>
                     {arrSem.map((dia, index )=>(
